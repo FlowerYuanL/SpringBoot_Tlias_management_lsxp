@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- 作为其他项目的模板时注意设置此处value的值-->
+    <!-- 定义日志文件的存放路径 -->
+    <property name="LOG_HOME" value="D:/javaLogs/Tlias"/>
+
+    <!-- 控制台输出格式 （开发环境使用）-->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>
+                <!-- 格式化输出：%d 标识日期 %thread 表示线程，%-5level 表示级别从左显示5个字符宽度，%logger 显示日志记录器的名称，%msg 表示输入的日志信息，%n 表示换行 -->
+                %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %-58.58logger - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- 通用业务日志（按日期+大小滚动） -->
+    <appender name="APP_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/app.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 日志文件输出的文件名，%i表示序号 -->
+            <fileNamePattern>${LOG_HOME}/app-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+            <!-- 最大文件大小，超过这个大小会出发滚到到新文件，默认10MB -->
+            <maxFileSize>10MB</maxFileSize>
+            <!-- 最多保留历史日志文件数量 -->
+            <maxHistory>30</maxHistory>
+            <!-- 总日志大小（可选） -->
+            <totalSizeCap>5GB</totalSizeCap>
+        </rollingPolicy>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %-58.58logger - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- 错误日志单独输出 -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/error-%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>60</maxHistory>
+            <totalSizeCap>5GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %-58.58logger - %msg%n
+            </pattern>
+        </encoder>
+        <!-- 只记录 ERROR 级别及以上的-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 日志级别设置 -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="APP_FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+    </root>
+
+    <!-- 单独为业务包设置调试级别 -->
+    <!--<logger name="com.lsxp" level="DEBUG"/>-->
+</configuration>

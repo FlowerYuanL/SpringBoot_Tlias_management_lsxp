@@ -1,0 +1,20 @@
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/dbtlias?allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&characterEncoding=utf8&useUnicode=true&useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: lsxp3112
+  application:
+    name: SpringBoot_Tlias_management_lsxp
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 驼峰命名映射
+    map-underscore-to-camel-case: true
+server:
+  port: 8080
+  tomcat:
+    use-apr: never
