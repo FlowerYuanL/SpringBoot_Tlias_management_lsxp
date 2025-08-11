@@ -1,5 +1,6 @@
 package com.lsxp.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -8,6 +9,7 @@ import java.time.LocalDate;
  * 工作经历
  */
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class EmpExpr {
     private Integer id; //ID
     private Integer empId; //员工ID

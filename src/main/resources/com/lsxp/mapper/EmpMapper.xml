@@ -13,6 +13,12 @@
         insert into emp(username, name, gender, phone, job, salary, image, entry_date, dept_id, create_time, update_time)
         values(#{username},#{name},#{gender},#{phone},#{job},#{salary},#{image},#{entryDate},#{deptId},#{createTime},#{updateTime})
     </insert>
+    <delete id="delete">
+        delete from emp where id in
+                        <foreach collection="Array" item="id" open="(" separator="," close=")">
+                            #{id}
+                        </foreach>
+    </delete>
 
     <select id="findAll" resultType="com.lsxp.pojo.Emp">
         select e.*,d.name from emp e left join dept d

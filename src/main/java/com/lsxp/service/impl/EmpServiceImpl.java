@@ -1,17 +1,19 @@
 package com.lsxp.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.lsxp.mapper.EmpExprMapper;
+import com.lsxp.mapper.EmpLogMapper;
 import com.lsxp.mapper.EmpMapper;
-import com.lsxp.pojo.Emp;
-import com.lsxp.pojo.EmpExpr;
-import com.lsxp.pojo.EmpQueryParam;
-import com.lsxp.pojo.PageResult;
+import com.lsxp.pojo.*;
+import com.lsxp.service.EmpLogService;
 import com.lsxp.service.EmpService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
@@ -26,6 +28,14 @@ public class EmpServiceImpl implements EmpService {
 
     @Autowired
     private EmpExprMapper empExprMapper;
+
+    //注入日志操作的service层
+    @Autowired
+    private EmpLogService empLogService;
+
+    //借助ObjectMapper实现JSON序列化
+    @Autowired
+    private ObjectMapper mapper;
 
 //    @Override
 //    public PageResult<Emp> queryAll(Integer page, Integer pageSize) {
@@ -70,23 +80,47 @@ public class EmpServiceImpl implements EmpService {
         return pageResult;
     }
 
+    @Transactional(rollbackFor = {Exception.class})
     @Override
     public void save(Emp emp) {
-        //1. 将用户信息保存到用户数据表，并注意返回用户新增信息的id
-        //   在此之前先设置好创建时间和更新时间
-        emp.setCreateTime(LocalDateTime.now());
-        emp.setUpdateTime(LocalDateTime.now());
-        empMapper.insert(emp);
-        log.info("EmpServiceImpl.save(): {}", emp);
-        //2.判断用户经历信息是否存在
-        List<EmpExpr> exprList = emp.getExprList();
-        if(!CollectionUtils.isEmpty(exprList)){
-            //3.如果用户经历信息存在，为用户经历表中的用户id赋上述刚得到的值
-            exprList.forEach(empExpr -> {
-                empExpr.setEmpId(emp.getId());
-            });
-            //4.将用户经历信息保存到对应的用户经历信息表
-            empExprMapper.insertBatch(exprList);
+        EmpLog empLog = new EmpLog();
+        try {
+            //1. 将用户信息保存到用户数据表，并注意返回用户新增信息的id
+            //   在此之前先设置好创建时间和更新时间
+            emp.setCreateTime(LocalDateTime.now());
+            emp.setUpdateTime(LocalDateTime.now());
+            empMapper.insert(emp);
+            log.info("保存员工基本信息:{}", emp);
+            //2.判断用户经历信息是否为空
+            List<EmpExpr> exprList = emp.getExprList();
+            if(!CollectionUtils.isEmpty(exprList)){
+                //3.如果用户经历信息存在，为用户经历表中的用户id赋上述刚得到的值
+                exprList.forEach(empExpr -> {
+                    empExpr.setEmpId(emp.getId());
+                });
+                //4.将用户经历信息保存到对应的用户经历信息表
+                empExprMapper.insertBatch(exprList);
+                log.info("保存员工工作经历信息:{}",exprList);
+            }
+            empLog.setResult("SUCCESS");
+        }catch (Exception e){
+            log.error("保存用户信息出错:{}",e.getMessage(),e);
+            throw e;
         }
+        finally {
+            //将上述操作保存到记录到数据库的日志中去
+            try {
+                empLog.setMsg(mapper.writeValueAsString(emp));
+            } catch (JsonProcessingException e) {
+                empLog.setMsg(e.getMessage());
+                log.error("员工信息序列化失败...{}",e.getMessage(),e);
+            }
+            empLogService.saveEmpLog(empLog);
+        }
+    }
+
+    @Override
+    public void delete(Integer[] ids) {
+        empMapper.delete(ids);
     }
 }

@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+
 @Slf4j
 @RestController
 @RequestMapping("/emps")
@@ -35,6 +37,16 @@ public class EmpController {
     public Result save(@RequestBody Emp emp){
         log.info("获取请求参数:{}",emp);
         empService.save(emp);
+        return Result.success();
+    }
+
+    /*
+    * 删除员工
+    * */
+    @DeleteMapping
+    public Result delete(Integer[] ids){
+        log.info("获取请求参数:{}", Arrays.toString(ids));
+        empService.delete(ids);
         return Result.success();
     }
 

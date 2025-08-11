@@ -3,8 +3,6 @@ package com.lsxp.mapper;
 import com.lsxp.pojo.Emp;
 import com.lsxp.pojo.EmpQueryParam;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -28,4 +26,6 @@ public interface EmpMapper {
     List<Emp> findAll(EmpQueryParam empQueryParam);
 
     void insert(Emp emp);
+
+    void delete(Integer[] ids);
 }

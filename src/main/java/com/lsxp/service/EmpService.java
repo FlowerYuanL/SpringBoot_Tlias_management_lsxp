@@ -8,4 +8,6 @@ public interface EmpService {
     PageResult<Emp> queryAll(EmpQueryParam empQueryParam);
 
     void save(Emp emp);
+
+    void delete(Integer[] ids);
 }

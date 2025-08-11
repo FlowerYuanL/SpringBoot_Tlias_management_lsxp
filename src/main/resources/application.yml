@@ -8,6 +8,16 @@ spring:
     password: lsxp3112
   application:
     name: SpringBoot_Tlias_management_lsxp
+  jackson:
+    time-zone: Asia/Shanghai
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false # 让jackson以字符串形式输出日期，而不是1970年起的毫秒数
+  servlet:
+    multipart:
+      # 设置最大单个文件的大小
+      max-file-size: 10MB
+      # 设置最大请求大小（包括所有文件和表单数据）
+      max-request-size: 100MB
 
 mybatis:
   configuration:
@@ -18,3 +28,13 @@ server:
   port: 8080
   tomcat:
     use-apr: never
+logging:
+  level:
+    org.springframework.jdbc.support.JdbcTransactionManager: debug
+
+
+aliyun:
+  oss:
+    endpoint: https://oss-cn-chengdu.aliyuncs.com
+    bucketName: lsxp-tlias-file
+    region: cn-chengdu
