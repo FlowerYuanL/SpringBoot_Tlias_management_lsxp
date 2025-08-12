@@ -27,5 +27,9 @@ public interface EmpMapper {
 
     void insert(Emp emp);
 
-    void delete(Integer[] ids);
+    void deleteBatch(List<Integer> ids);
+
+    Emp findById(Integer id);
+
+    void update(Emp emp);
 }

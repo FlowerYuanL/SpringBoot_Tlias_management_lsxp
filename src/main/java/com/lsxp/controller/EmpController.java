@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -44,9 +45,29 @@ public class EmpController {
     * 删除员工
     * */
     @DeleteMapping
-    public Result delete(Integer[] ids){
-        log.info("获取请求参数:{}", Arrays.toString(ids));
+    public Result delete(@RequestParam List<Integer> ids){
+        log.info("获取请求参数:{}", ids);
         empService.delete(ids);
+        return Result.success();
+    }
+
+    /*
+    * 根据员工id查询员工信息
+    * */
+    @GetMapping("/{id}")
+    public Result queryId(@PathVariable Integer id){
+        log.info("获取请求参数:{}",id);
+        Emp emp = empService.queryId(id);
+        return Result.success(emp);
+    }
+
+    /*
+    * 编辑员工信息
+    * */
+    @PutMapping
+    public Result update(@RequestBody Emp emp){
+        log.info("获取请求参数:{}",emp);
+        empService.update(emp);
         return Result.success();
     }
 

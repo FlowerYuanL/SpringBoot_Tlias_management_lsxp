@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.lsxp.mapper.EmpExprMapper;
-import com.lsxp.mapper.EmpLogMapper;
 import com.lsxp.mapper.EmpMapper;
 import com.lsxp.pojo.*;
 import com.lsxp.service.EmpLogService;
@@ -17,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -120,7 +120,39 @@ public class EmpServiceImpl implements EmpService {
     }
 
     @Override
-    public void delete(Integer[] ids) {
-        empMapper.delete(ids);
+    @Transactional(rollbackFor = {Exception.class})
+    public void delete(List<Integer> ids) {
+
+        // 1.在员工表中批量删除——delete by ids
+        empMapper.deleteBatch(ids);
+
+        // 2.在员工经历表中批量删除——delete by empIds
+        empExprMapper.deleteBatch(ids);
+    }
+
+    @Override
+    public Emp queryId(Integer id) {
+        //1.根据id查询用户详细信息和用户经历信息
+        Emp emp = empMapper.findById(id);
+        return emp;
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public void update(Emp emp) {
+        //设置该表的更新时间
+        emp.setUpdateTime(LocalDateTime.now());
+        //调用方法更新员工信息
+        empMapper.update(emp);
+        //获取员工经历信息
+        List<EmpExpr> exprList = emp.getExprList();
+        log.info("获取员工经历信息:{}", exprList);
+        //删除原来的员工经历信息——借助Arrays.asList使用批量删除
+        empExprMapper.deleteBatch(Arrays.asList(emp.getId()));
+        //判空
+        if(!CollectionUtils.isEmpty(exprList)){
+            exprList.forEach(empExpr -> empExpr.setEmpId(emp.getId()));
+            empExprMapper.insertBatch(exprList);
+        }
     }
 }

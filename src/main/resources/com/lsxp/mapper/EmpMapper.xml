@@ -13,9 +13,31 @@
         insert into emp(username, name, gender, phone, job, salary, image, entry_date, dept_id, create_time, update_time)
         values(#{username},#{name},#{gender},#{phone},#{job},#{salary},#{image},#{entryDate},#{deptId},#{createTime},#{updateTime})
     </insert>
-    <delete id="delete">
+
+
+    <update id="update">
+        update emp
+            <trim prefix="set" suffixOverrides=",">
+                <if test="username != null and username != ''">username = #{username},</if>
+                <if test="password != null and password != ''">password = #{password},</if>
+                <if test="name != null and name != ''">name = #{name},</if>
+                <if test="gender != null">gender = #{gender},</if>
+                <if test="job != null">job = #{job},</if>
+                <if test="phone != null and phone != ''">phone = #{phone},</if>
+                <if test="salary != null">salary = #{salary},</if>
+                <if test="image != null and image != ''">image = #{image},</if>
+                <if test="deptId != null">dept_id = #{deptId},</if>
+                <if test="entryDate != null">entry_date = #{entryDate},</if>
+                <if test="updateTime != null">update_time = #{updateTime},</if>
+            </trim>
+        where id = #{id}
+    </update>
+
+
+
+    <delete id="deleteBatch">
         delete from emp where id in
-                        <foreach collection="Array" item="id" open="(" separator="," close=")">
+                        <foreach collection="ids" item="id" open="(" separator="," close=")">
                             #{id}
                         </foreach>
     </delete>
@@ -35,5 +57,40 @@
                 </if>
             </where>
             order by e.update_time desc
+    </select>
+
+    <resultMap id="empAndExpr" type="com.lsxp.pojo.Emp">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+        <result column="gender" property="gender"/>
+        <result column="phone" property="phone"/>
+        <result column="job" property="job"/>
+        <result column="salary" property="salary"/>
+        <result column="image" property="image"/>
+        <result column="entry_date" property="entryDate"/>
+        <result column="dept_id" property="deptId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <collection property="exprList" ofType="com.lsxp.pojo.EmpExpr">
+            <id column="p_id" property="id"/>
+            <result column="p_empId" property="empId"/>
+            <result column="p_begin" property="begin"/>
+            <result column="p_end" property="end"/>
+            <result column="p_company" property="company"/>
+            <result column="p_job" property="job"/>
+        </collection>
+    </resultMap>
+    <select id="findById" resultMap="empAndExpr">
+        select
+            e.*,
+            p.id p_id,
+            p.emp_id p_empId,
+            p.begin p_begin,
+            p.end p_end,
+            p.company p_company,
+            p.job p_job
+        from emp e left join emp_expr p on e.id = p.emp_id where e.id = #{id}
     </select>
 </mapper>
