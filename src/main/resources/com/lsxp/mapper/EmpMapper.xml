@@ -93,4 +93,26 @@
             p.job p_job
         from emp e left join emp_expr p on e.id = p.emp_id where e.id = #{id}
     </select>
+
+    <select id="countJob" resultType="java.util.Map">
+        select (
+            case
+                when job = 1 then '班主任'
+                when job = 2 then '讲师'
+                when job = 3 then '学工主管'
+                when job = 4 then '教研主管'
+                when job = 5 then '咨询师'
+            else '其他' end
+            )position,count(*) num
+        from emp group by job order by num
+    </select>
+
+    <select id="countGender" resultType="com.lsxp.pojo.GenderOption">
+        select (
+                   case when gender = 1 then '男性员工'
+                        when gender = 2 then '女性员工'
+                        else '未定义性别' end
+                   ) name,count(*) value
+        from emp group by gender;
+    </select>
 </mapper>

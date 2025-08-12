@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--xmlns时xml文件命名空间的声明，用于唯一标志该xml文件的结构规范-->
+<configuration>
+    <!--引入properties文件-->
+    <properties resource="db.properties"/>
+    <settings>
+        <!--是否开启缓存-->
+        <setting name="cacheEnabled" value="true"/>
+        <!--以下三个"setting"均默认为"false"-->
+        <!--是否开启延迟加载，如果开启，所有对象都会延迟加载-->
+        <!--开启全局懒加载-->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <!--
+        是否开启关联对象属性的延迟加载，如果开启，对任意延迟属性的调用
+        都会使用带有延迟加载属性的对象向完整加载，否则每种属性都按需加载
+        -->
+        <!--开启关联属性的懒加载-->
+        <setting name="aggressiveLazyLoading" value="true"/>
+        <!--开启驼峰命名规则与数据库命名字段的映射-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!--输出SQL日志-->
+        <!--<setting name="logImpl" value="STDOUT_LOGGING"/>-->
+    </settings>
+
+    <!--为pojo文件夹下的实体类配置别名-->
+    <!--默认实体的类名就是别名-->
+    <typeAliases>
+        <package name="com.lsxp.pojo"/>
+    </typeAliases>
+
+    <!--default定义默认的运行环境id-->
+    <environments default="development1">
+        <environment id="development1">
+            <!--定义事务管理器和数据源-->
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${mysql.driver}"/>
+                <property name="url" value="${mysql.url}"/>
+                <property name="username" value="${mysql.username}"/>
+                <property name="password" value="${mysql.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!--将SQL语句的映射文件加载到程序中-->
+    <!--此处配置的主要目的是为了让mybatis-config文件知道映射文件的位置-->
+    <mappers>
+        <package name="com.lsxp.mapper"/>
+    </mappers>
+</configuration>

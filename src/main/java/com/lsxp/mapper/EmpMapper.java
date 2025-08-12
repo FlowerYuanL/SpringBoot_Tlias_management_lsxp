@@ -2,9 +2,12 @@ package com.lsxp.mapper;
 
 import com.lsxp.pojo.Emp;
 import com.lsxp.pojo.EmpQueryParam;
+import com.lsxp.pojo.GenderOption;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface EmpMapper {
@@ -32,4 +35,15 @@ public interface EmpMapper {
     Emp findById(Integer id);
 
     void update(Emp emp);
+
+    /*
+    * 统计员工职位信息，人数
+    * */
+    @MapKey("position")
+    List<Map<String,Object>> countJob();
+
+    /*
+    * 统计员工性别信息，人数
+    * */
+    List<GenderOption> countGender();
 }
