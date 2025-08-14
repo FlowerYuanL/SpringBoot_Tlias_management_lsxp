@@ -155,4 +155,10 @@ public class EmpServiceImpl implements EmpService {
             empExprMapper.insertBatch(exprList);
         }
     }
+
+    @Override
+    public List<Emp> lsxpQueryAll() {
+        List<Emp> empList = empMapper.lsxpQueryAll();
+        return  empList;
+    }
 }

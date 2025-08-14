@@ -46,4 +46,6 @@ public interface EmpMapper {
     * 统计员工性别信息，人数
     * */
     List<GenderOption> countGender();
+
+    List<Emp> lsxpQueryAll();
 }

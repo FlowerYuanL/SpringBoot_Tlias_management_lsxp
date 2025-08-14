@@ -16,4 +16,6 @@ public interface EmpService {
     Emp queryId(Integer id);
 
     void update(Emp emp);
+
+    List<Emp> lsxpQueryAll();
 }

@@ -18,6 +18,13 @@ import java.util.List;
 @RequestMapping("/emps")
 public class EmpController {
 
+    /*
+    * GetMapping ->Select
+    * DeleteMapping ->Delete
+    * PostMapping ->Insert
+    * PutMapping ->Update
+    * */
+
     @Autowired
     private EmpService empService;
 
@@ -25,7 +32,7 @@ public class EmpController {
      * 借助PageHelper实现员工信息的分页查询
      * */
     @GetMapping
-    public Result queryAll(EmpQueryParam empQueryParam){
+    public Result queryAllPage(EmpQueryParam empQueryParam){
         log.info("查询参数：{}",empQueryParam);
         PageResult<Emp> pageResult = empService.queryAll(empQueryParam);
         return Result.success(pageResult);
@@ -69,6 +76,16 @@ public class EmpController {
         log.info("获取请求参数:{}",emp);
         empService.update(emp);
         return Result.success();
+    }
+
+    /*
+    * 查询全部员工信息——为了实现课程表中选择班主任的部分
+    * */
+    @GetMapping("/list")
+    public Result queryAll(){
+        log.info("为班级表查询全部员工信息");
+        List<Emp> empList = empService.lsxpQueryAll();
+        return Result.success(empList);
     }
 
 }

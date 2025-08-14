@@ -11,4 +11,15 @@ import java.util.List;
 public interface ClazzMapper {
 
     List<Clazz> findAll(ClazzQueryParam clazzQueryParam);
+
+    void deleteById(Integer id);
+
+    void saveClazz(Clazz clazz);
+
+    @Select("select * from clazz where id = #{id}")
+    Clazz getClazzById(Integer id);
+
+    void updateClazz(Clazz clazz);
+
+    List<Clazz> getAllClazz();
 }

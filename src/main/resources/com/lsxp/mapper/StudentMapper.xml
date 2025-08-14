@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+  mapper 根标签：
+  - namespace（必需）：绑定 Mapper 接口的全限定名（包名+接口名）
+  - 作用：建立 XML 文件与 Java 接口的关联[1,6,8](@ref)
+-->
+<mapper namespace="com.lsxp.mapper.StudentMapper">
+
+    <!--
+        动态SQL语句，可复用<insert>
+    -->
+    <insert id="saveStudent">
+        INSERT INTO student
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="no != null and no != ''">no,</if>
+            <if test="gender != null">gender,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="idCard != null and idCard != ''">id_card,</if>
+            <if test="isCollege != null">is_college,</if>
+            <if test="address != null and address != ''">address,</if>
+            <if test="degree != null">degree,</if>
+            <if test="graduationDate != null">graduation_date,</if>
+            <if test="clazzId != null">clazz_id,</if>
+            <if test="violationCount != null">violation_count,</if>
+            <if test="violationScore != null">violation_score,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="no != null and no != ''">#{no},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="idCard != null and  idCard != ''">#{idCard},</if>
+            <if test="isCollege != null">#{isCollege},</if>
+            <if test="address != null and address != null">#{address},</if>
+            <if test="degree != null">#{degree},</if>
+            <if test="graduationDate != null">#{graduationDate},</if>
+            <if test="clazzId != null">#{clazzId},</if>
+            <if test="violationCount != null">#{violationCount},</if>
+            <if test="violationScore != null">#{violationScore},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+    <update id="updateStudent">
+        UPDATE student
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="no != null and no != ''">no = #{no},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="idCard != null and idCard != ''">id_card = #{idCard},</if>
+            <if test="isCollege != null">is_college = #{isCollege},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="degree != null">degree = #{degree},</if>
+            <if test="graduationDate != null">graduation_date = #{graduationDate},</if>
+            <if test="clazzId != null">clazz_id = #{clazzId},</if>
+            <!-- 更新时需要更新时间 -->
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!--违纪次数加一，违纪分数加上score-->
+    <update id="updateStudentViolation">
+        update student set violation_count = COALESCE(violation_count,0) + 1,
+                           violation_score = COALESCE(violation_score,0) + #{score} where id = #{id};
+    </update>
+
+    <delete id="deleteStudents">
+        delete from student where id in
+            <foreach collection="ids" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+    </delete>
+
+    <!--
+
+    注意在使用if进行条件判断时，判断的内容是封装进StudentQueryParam的参数
+
+    -->
+    <select id="findByClazzId" resultType="java.lang.Integer">
+        select count(*) from student where clazz_id = #{id}
+    </select>
+
+
+    <select id="findWithClazz" resultType="com.lsxp.pojo.Student">
+        select
+            s.*,c.name clazz_name
+        from student s left join clazz c
+            on s.clazz_id = c.id
+        <where>
+            <if test="name != null and name != ''">
+                s.name like concat ('%',#{name},'%')
+            </if>
+            <if test="degree != null">
+                and s.degree = #{degree}
+            </if>
+            <if test="clazzId != null">
+                and s.clazz_id = #{clazzId}
+            </if>
+        </where>
+        order by s.update_time desc
+    </select>
+    <select id="getStudentById" resultType="student">
+        select * from student where id = #{id}
+    </select>
+</mapper>

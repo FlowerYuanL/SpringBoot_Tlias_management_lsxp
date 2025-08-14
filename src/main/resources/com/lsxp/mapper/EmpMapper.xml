@@ -9,6 +9,7 @@
   - 作用：建立 XML 文件与 Java 接口的关联[1,6,8](@ref)
 -->
 <mapper namespace="com.lsxp.mapper.EmpMapper">
+
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         insert into emp(username, name, gender, phone, job, salary, image, entry_date, dept_id, create_time, update_time)
         values(#{username},#{name},#{gender},#{phone},#{job},#{salary},#{image},#{entryDate},#{deptId},#{createTime},#{updateTime})
@@ -42,8 +43,8 @@
                         </foreach>
     </delete>
 
-    <select id="findAll" resultType="com.lsxp.pojo.Emp">
-        select e.*,d.name from emp e left join dept d
+    <select id="findAll" resultType="emp">
+        select e.*,d.name deptName from emp e left join dept d
             on e.dept_id = d.id
             <where>
                 <if test="name != null and name != '' ">
@@ -107,12 +108,16 @@
         from emp group by job order by num
     </select>
 
-    <select id="countGender" resultType="com.lsxp.pojo.GenderOption">
+    <select id="countGender" resultType="genderOption">
         select (
                    case when gender = 1 then '男性员工'
                         when gender = 2 then '女性员工'
                         else '未定义性别' end
                    ) name,count(*) value
         from emp group by gender;
+    </select>
+
+    <select id="lsxpQueryAll" resultType="emp">
+        select * from emp;
     </select>
 </mapper>

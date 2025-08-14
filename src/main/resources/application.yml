@@ -24,6 +24,7 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     # 驼峰命名映射
     map-underscore-to-camel-case: true
+  type-aliases-package: com.lsxp.pojo
 server:
   port: 8080
   tomcat:

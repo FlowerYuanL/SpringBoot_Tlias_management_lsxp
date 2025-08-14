@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Student {
     private Integer id; //ID
+
+    /*插入时需要更新的参数*/
     private String name; //姓名
     private String no; //序号
     private Integer gender; //性别 , 1: 男 , 2 : 女
@@ -22,10 +24,16 @@ public class Student {
     private Integer degree; //最高学历, 1: 初中, 2: 高中 , 3: 大专 , 4: 本科 , 5: 硕士 , 6: 博士
     private LocalDate graduationDate; //毕业时间
     private Integer clazzId; //班级ID
+
+    /*插入时未更新*/
     private Short violationCount; //违纪次数
     private Short violationScore; //违纪扣分
+
+    /*插入时需要更新的参数*/
     private LocalDateTime createTime; //创建时间
+    /*更新时需要额外更新的参数*/
     private LocalDateTime updateTime; //修改时间
 
+    /*多表查询，联合Clazz表查询*/
     private String clazzName;//班级名称
 }

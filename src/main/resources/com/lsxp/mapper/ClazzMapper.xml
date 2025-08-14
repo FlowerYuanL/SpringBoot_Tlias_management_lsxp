@@ -9,10 +9,96 @@
   - 作用：建立 XML 文件与 Java 接口的关联[1,6,8](@ref)
 -->
 <mapper namespace="com.lsxp.mapper.ClazzMapper">
+    <insert id="saveClazz" parameterType="clazz">
+        INSERT INTO clazz
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">
+                name,
+            </if>
+            <if test="room != null and room != ''">
+                room,
+            </if>
+            <if test="beginDate != null">
+                begin_date,
+            </if>
+            <if test="endDate != null">
+                end_date,
+            </if>
+            <if test="masterId != null">
+                master_id,
+            </if>
+            <if test="subject != null">
+                subject,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">
+                #{name},
+            </if>
+            <if test="room != null and room != ''">
+                #{room},
+            </if>
+            <if test="beginDate != null">
+                #{beginDate},
+            </if>
+            <if test="endDate != null">
+                #{endDate},
+            </if>
+            <if test="masterId != null">
+                #{masterId},
+            </if>
+            <if test="subject != null">
+                #{subject},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateClazz" parameterType="clazz">
+        UPDATE clazz
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="room != null and room != ''">
+                room = #{room},
+            </if>
+            <if test="beginDate != null">
+                begin_date = #{beginDate},
+            </if>
+            <if test="endDate != null">
+                end_date = #{endDate},
+            </if>
+            <if test="masterId != null">
+                master_id = #{masterId},
+            </if>
+            <if test="subject != null">
+                subject = #{subject},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete from clazz where id = #{id}
+    </delete>
 
 
-    <select id="findAll" resultType="com.lsxp.pojo.Clazz">
-        select c.*,e.name
+    <select id="findAll" resultType="clazz">
+        select c.*,e.name master_name
         from clazz c left join emp e
             on c.master_id = e.id
         <where>
@@ -24,5 +110,8 @@
             </if>
         </where>
         order by c.update_time desc
+    </select>
+    <select id="getAllClazz" resultType="clazz">
+        select * from clazz;
     </select>
 </mapper>
