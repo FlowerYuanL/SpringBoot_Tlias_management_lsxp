@@ -90,7 +90,7 @@
     </select>
 
 
-    <select id="findWithClazz" resultType="com.lsxp.pojo.Student">
+    <select id="findWithClazz" resultType="student">
         select
             s.*,c.name clazz_name
         from student s left join clazz c
@@ -110,5 +110,23 @@
     </select>
     <select id="getStudentById" resultType="student">
         select * from student where id = #{id}
+    </select>
+    <select id="countClazz" resultType="java.util.Map">
+        select c.name clazz_name,count(*) nums
+        from student s left join clazz c on s.clazz_id = c.id
+        group by clazz_id
+        order by count(*);
+    </select>
+
+    <select id="countDegree" resultType="degreeOption">
+        select (case degree
+                    when 1 then '初中'
+                    when 2 then '高中'
+                    when 3 then '大专'
+                    when 4 then '本科'
+                    when 5 then '硕士'
+                    when 6 then '博士'
+                    else '其它' end
+                   ) name,count(*) value from student group by degree;
     </select>
 </mapper>
