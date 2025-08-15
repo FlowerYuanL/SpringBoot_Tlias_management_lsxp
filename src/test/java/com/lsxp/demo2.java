@@ -6,9 +6,8 @@ import com.aliyun.oss.common.comm.SignVersion;
 import com.aliyun.oss.model.*;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.util.Arrays;
+
 
 @Slf4j
 public class demo2 {

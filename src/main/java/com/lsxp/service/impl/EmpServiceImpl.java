@@ -9,6 +9,7 @@ import com.lsxp.mapper.EmpMapper;
 import com.lsxp.pojo.*;
 import com.lsxp.service.EmpLogService;
 import com.lsxp.service.EmpService;
+import com.lsxp.utils.JWTutils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,9 @@ import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -160,5 +163,19 @@ public class EmpServiceImpl implements EmpService {
     public List<Emp> lsxpQueryAll() {
         List<Emp> empList = empMapper.lsxpQueryAll();
         return  empList;
+    }
+
+    @Override
+    public LogInfo login(Emp emp) {
+        LogInfo info = empMapper.getInfoByUsernameAndPassword(emp);
+        if(info!=null){
+            Map<String,Object> map = new HashMap<>();
+            map.put("id",info.getId());
+            map.put("username",info.getUsername());
+            String token = JWTutils.generateToken(map);
+            info.setToken(token);
+            return info;
+        }
+        return null;
     }
 }

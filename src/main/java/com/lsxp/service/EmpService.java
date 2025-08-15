@@ -2,6 +2,7 @@ package com.lsxp.service;
 
 import com.lsxp.pojo.Emp;
 import com.lsxp.pojo.EmpQueryParam;
+import com.lsxp.pojo.LogInfo;
 import com.lsxp.pojo.PageResult;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface EmpService {
     void update(Emp emp);
 
     List<Emp> lsxpQueryAll();
+
+    LogInfo login(Emp emp);
 }

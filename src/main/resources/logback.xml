@@ -10,7 +10,7 @@
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>
                 <!-- 格式化输出：%d 标识日期 %thread 表示线程，%-5level 表示级别从左显示5个字符宽度，%logger 显示日志记录器的名称，%msg 表示输入的日志信息，%n 表示换行 -->
-                %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %-58.58logger - %msg%n
+                %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %-36.36logger - %msg%n
             </pattern>
         </encoder>
     </appender>

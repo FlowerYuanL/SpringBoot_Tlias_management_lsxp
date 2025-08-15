@@ -42,10 +42,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = NoResourceFoundException.class)
     public Result NoResourceFoundExceptionhandler(NoResourceFoundException e) {
         String message = e.getMessage();
-        int index = message.lastIndexOf("static resource");
-        String errorMessage = message.substring(index + 13).split(" ")[1];
-        log.error("{}暂时未开发",errorMessage);
-        return Result.error("出错啦，请联系管理员"+errorMessage);
+        log.error("{}暂时未开发",message,e);
+        return Result.error("出错啦，请联系管理员"+message);
     }
 
     /*

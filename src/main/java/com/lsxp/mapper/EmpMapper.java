@@ -3,8 +3,10 @@ package com.lsxp.mapper;
 import com.lsxp.pojo.Emp;
 import com.lsxp.pojo.EmpQueryParam;
 import com.lsxp.pojo.GenderOption;
+import com.lsxp.pojo.LogInfo;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 import java.util.Map;
@@ -48,4 +50,8 @@ public interface EmpMapper {
     List<GenderOption> countGender();
 
     List<Emp> lsxpQueryAll();
+
+
+    @Select("select id,username,name from emp where username = #{username} and password = #{password};")
+    LogInfo getInfoByUsernameAndPassword(Emp emp);
 }
