@@ -176,7 +176,7 @@ public class EmpServiceImpl implements EmpService {
             Map<String,Object> map = new HashMap<>();
             map.put("username",info.getUsername());
             String token =jwtUtils.generateToken(map,String.valueOf(info.getId()));
-            info.setToken("Bearer "+token);
+            info.setToken(token);
             return info;
         }
         return null;

@@ -26,22 +26,20 @@ public class TokenInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        //获取标注你的请求头Authorization
-        String Authorization = request.getHeader("token");
-        log.info("Authorization: {}", Authorization);
+        //获取token字段
+        String token = request.getHeader("token");
+        log.info("token:{}",token);
         //校验Bearer前缀
-        if (!StringUtils.hasText(Authorization) || !Authorization.startsWith("Bearer ")) {
+        if (!StringUtils.hasText(token)) {
             log.error("授权信息为空或非法!");
             throw new SecurityException("授权信息为空或非法");
         }
-        //获取token字符串
-        String token = Authorization.substring(7);
         //调用JWT工具类，并将异常直接抛出，不需要手动设置401
         Claims claims = jwtUtils.parseToken(token);
 
         //获取用户的UserId，用于日志存储
         String userId = claims.getSubject();
-        String userName = claims.get("userName",String.class);
+        String userName = claims.get("username",String.class);
         //将信息封装进UserDTO中
         UserDTO userDTO = new UserDTO(Integer.parseInt(userId),userName);
         //将信息存储到ThreadLocal中

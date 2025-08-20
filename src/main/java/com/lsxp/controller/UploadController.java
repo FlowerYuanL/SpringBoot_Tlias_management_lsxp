@@ -54,7 +54,6 @@ public class UploadController {
     *
     * */
     @PostMapping("/upload")
-    @LogAnnotation
     public Result update(MultipartFile file) throws Exception {
 
         String originalFileName = file.getOriginalFilename();
