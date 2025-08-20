@@ -1,12 +1,14 @@
 package com.lsxp.filter;
 
 
-import com.lsxp.utils.JWTutils;
+import com.lsxp.utils.JwtUtils;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
@@ -15,10 +17,17 @@ import java.io.IOException;
 *               "/*"->代表全部的文件
 * */
 
+//@Component
 @Slf4j
 //@WebFilter(urlPatterns = "/*")
 public class TokenFilter implements Filter {
 
+    //注入JWT的工具类
+    private JwtUtils jwtUtils;
+
+    public TokenFilter(JwtUtils jwtUtils) {
+        this.jwtUtils = jwtUtils;
+    }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -45,7 +54,7 @@ public class TokenFilter implements Filter {
         }
         //如果有token，解析token
         try {
-            JWTutils.parseToken(token);
+            jwtUtils.parseToken(token);
         } catch (Exception e) {
             //如果解析失败，响应401
             log.info("登录信息已经失效，请重新登录");

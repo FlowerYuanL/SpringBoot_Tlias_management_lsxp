@@ -37,5 +37,12 @@ logging:
 aliyun:
   oss:
     endpoint: https://oss-cn-chengdu.aliyuncs.com
-    bucketName: lsxp-tlias-file
+    bucket-name: lsxp-tlias-file
     region: cn-chengdu
+
+# jwt属性配置
+jwt:
+  secret-key: "ZXyUu3EqW2wwsDskJiHwQZTRGgdPkNJjBGAQBrWbarudi26gKofMA2FBNkqdbeHDLNip0bD75BtvAWdyqQjxRzYRrXAR" #密钥
+  expiration-time: 43200000 #12小时，单位：毫秒
+  issuer: http://localhost:8080/login #发行者
+  audience: my-app-clients #接收者

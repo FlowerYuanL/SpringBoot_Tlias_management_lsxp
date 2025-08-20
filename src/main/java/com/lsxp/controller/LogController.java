@@ -1,38 +1,30 @@
 package com.lsxp.controller;
 
-
-import com.lsxp.pojo.Emp;
-import com.lsxp.pojo.LogInfo;
+import com.lsxp.pojo.LogQueryParam;
+import com.lsxp.pojo.OperateLog;
+import com.lsxp.pojo.PageResult;
 import com.lsxp.pojo.Result;
-import com.lsxp.service.EmpService;
+import com.lsxp.service.LogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/*
-* 登录Controller
-* */
-@Slf4j
 @RestController
+@Slf4j
+@RequestMapping("/log")
 public class LogController {
 
+    //注入LogService接口
     @Autowired
-    private EmpService empService;
+    private LogService logService;
 
-    /*
-    * 登录功能，注意需要使用Post提交数据（更安全）
-    * 使用注解@RequestBody接收前端传来的数据
-    * */
-    @PostMapping("/login")
-    public Result login(@RequestBody Emp emp){
-        log.info("登录信息——用户名：{},密码：{}",emp.getUsername(),emp.getPassword());
-        LogInfo info = empService.login(emp);
-        if(info!=null){
-            return Result.success(info);
-        }
-        return Result.error("用户名或密码错误");
+    @GetMapping("/page")
+    public Result pageLog(LogQueryParam logQueryParam) {
+        log.info("日志分页查询参数:{}",logQueryParam);
+        PageResult<OperateLog> pageResult = logService.pageQuery(logQueryParam);
+        return Result.success(pageResult);
     }
-}
 
+}

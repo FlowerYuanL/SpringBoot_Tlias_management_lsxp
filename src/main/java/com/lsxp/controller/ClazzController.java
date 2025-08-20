@@ -1,6 +1,7 @@
 package com.lsxp.controller;
 
 
+import com.google.errorprone.annotations.concurrent.LazyInit;
 import com.lsxp.annotation.LogAnnotation;
 import com.lsxp.pojo.Clazz;
 import com.lsxp.pojo.ClazzQueryParam;
@@ -9,6 +10,7 @@ import com.lsxp.pojo.Result;
 import com.lsxp.service.ClazzService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -16,6 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@Lazy
 @RequestMapping("/clazzs")
 public class ClazzController {
 

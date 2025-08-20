@@ -1,4 +1,4 @@
-package com.lsxp.utils;
+package com.lsxp.config.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

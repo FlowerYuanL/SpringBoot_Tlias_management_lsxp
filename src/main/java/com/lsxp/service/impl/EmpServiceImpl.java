@@ -9,7 +9,7 @@ import com.lsxp.mapper.EmpMapper;
 import com.lsxp.pojo.*;
 import com.lsxp.service.EmpLogService;
 import com.lsxp.service.EmpService;
-import com.lsxp.utils.JWTutils;
+import com.lsxp.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +25,10 @@ import java.util.Map;
 @Slf4j
 @Service
 public class EmpServiceImpl implements EmpService {
+
+    //注入JWT工具类
+    @Autowired
+    private JwtUtils jwtUtils;
 
     @Autowired
     private EmpMapper empMapper;
@@ -170,10 +174,9 @@ public class EmpServiceImpl implements EmpService {
         LogInfo info = empMapper.getInfoByUsernameAndPassword(emp);
         if(info!=null){
             Map<String,Object> map = new HashMap<>();
-            map.put("id",info.getId());
             map.put("username",info.getUsername());
-            String token = JWTutils.generateToken(map);
-            info.setToken(token);
+            String token =jwtUtils.generateToken(map,String.valueOf(info.getId()));
+            info.setToken("Bearer "+token);
             return info;
         }
         return null;

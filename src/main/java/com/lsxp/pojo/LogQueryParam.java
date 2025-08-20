@@ -4,16 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-/*
-* 用于封装ThreadLocal中的用户信息
-* */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+public class LogQueryParam {
 
-    private Integer id;
-    private String username;
+    private Integer page = 1;//页码
 
+    private Integer pageSize = 10;//每页展示的记录数
 }
