@@ -1,6 +1,7 @@
 package com.lsxp.controller;
 
 
+import com.lsxp.annotation.LogAnnotation;
 import com.lsxp.pojo.PageResult;
 import com.lsxp.pojo.Result;
 import com.lsxp.pojo.Student;
@@ -44,6 +45,7 @@ public class StudentController {
     * 插入操作
     * */
     @PostMapping
+    @LogAnnotation
     public Result saveStudent(@RequestBody Student student) {
         log.info("保存学生信息，从前端接收数据:{}", student);
         studentService.saveStudent(student);
@@ -66,6 +68,7 @@ public class StudentController {
     * 通过注解@RequestBody接收前端传来的请求体参数
     * */
     @PutMapping
+    @LogAnnotation
     public Result updateStudent(@RequestBody Student student) {
         log.info("修改学员信息，接收前端传递来的请求体参数:{}", student);
         studentService.updateStudent(student);
@@ -77,6 +80,7 @@ public class StudentController {
     * 通过注解@PathVariable接收前端传递来的id数组
     * */
     @DeleteMapping("/{ids}")
+    @LogAnnotation
     public Result deleteStudents(@PathVariable Integer[] ids) {
         log.info("删除学员信息，传来的数组为:{}",ids);
         studentService.deleteStudents(ids);
@@ -89,6 +93,7 @@ public class StudentController {
     * 学生违纪->违纪分数增加score->违纪次数+1
     * */
     @PutMapping("/violation/{id}/{score}")
+    @LogAnnotation
     public Result updateStudentViolation(@PathVariable Integer id, @PathVariable Integer score) {
         log.info("学员id:{}，违纪增加的分数:{}",id,score);
         studentService.updateStudentViolation(id,score);

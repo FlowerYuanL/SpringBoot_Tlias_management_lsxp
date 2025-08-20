@@ -1,6 +1,7 @@
 package com.lsxp.controller;
 
 
+import com.lsxp.annotation.LogAnnotation;
 import com.lsxp.pojo.Emp;
 import com.lsxp.pojo.EmpQueryParam;
 import com.lsxp.pojo.PageResult;
@@ -42,6 +43,7 @@ public class EmpController {
     * 新增员工
     * */
     @PostMapping
+    @LogAnnotation
     public Result save(@RequestBody Emp emp){
         log.info("获取请求参数:{}",emp);
         empService.save(emp);
@@ -72,6 +74,7 @@ public class EmpController {
     * 编辑员工信息
     * */
     @PutMapping
+    @LogAnnotation
     public Result update(@RequestBody Emp emp){
         log.info("获取请求参数:{}",emp);
         empService.update(emp);

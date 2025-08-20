@@ -1,5 +1,6 @@
 package com.lsxp.controller;
 
+import com.lsxp.annotation.LogAnnotation;
 import com.lsxp.pojo.Result;
 import com.lsxp.utils.AliyunOSSOperator;
 import com.lsxp.utils.SystemConstants;
@@ -53,6 +54,7 @@ public class UploadController {
     *
     * */
     @PostMapping("/upload")
+    @LogAnnotation
     public Result update(MultipartFile file) throws Exception {
 
         String originalFileName = file.getOriginalFilename();

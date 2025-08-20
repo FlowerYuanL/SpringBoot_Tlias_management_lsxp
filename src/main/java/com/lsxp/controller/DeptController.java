@@ -1,5 +1,6 @@
 package com.lsxp.controller;
 
+import com.lsxp.annotation.LogAnnotation;
 import com.lsxp.pojo.Dept;
 import com.lsxp.pojo.Result;
 import com.lsxp.service.DeptService;
@@ -30,6 +31,7 @@ public class DeptController {
     * 通过Id删除部门信息
     * */
     @DeleteMapping
+    @LogAnnotation
     public Result deleteById(Integer id){
         log.debug("Controller:通过ID:{}删除部门信息",id);
         deptService.deleteById(id);
@@ -40,6 +42,7 @@ public class DeptController {
     * 添加部门
     * */
     @PostMapping
+    @LogAnnotation
     public Result save(@RequestBody Dept dept){
         String name = dept.getName();
         log.info("Controller:新增部门信息，部门名称为:{},新增时间为:{}",name, LocalDateTime.now());
@@ -61,6 +64,7 @@ public class DeptController {
     * 修改部门——修改数据
     * */
     @PutMapping
+    @LogAnnotation
     public Result updateByID(@RequestBody Dept dept){
         log.info("Controller:更改id为{}的部门名称为:{}",dept.getId(),dept.getName());
         deptService.modifyById(dept);

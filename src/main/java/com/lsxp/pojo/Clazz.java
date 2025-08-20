@@ -5,6 +5,8 @@ package com.lsxp.pojo;
 * 班级表
 * */
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,6 +40,7 @@ public class Clazz {
     /*
     * 获取班级状态
     * */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getStatusByTimes() {
         return this.beginDate.isAfter(LocalDate.now()) ? "未开班" : (!this.endDate.isBefore(LocalDate.now()) ? "已开班" : "已结课");
     }

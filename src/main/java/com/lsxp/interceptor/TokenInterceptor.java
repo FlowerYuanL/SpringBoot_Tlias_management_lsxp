@@ -1,6 +1,9 @@
 package com.lsxp.interceptor;
 
+import com.lsxp.pojo.UserContextHoler;
+import com.lsxp.pojo.UserDTO;
 import com.lsxp.utils.JWTutils;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +38,10 @@ public class TokenInterceptor implements HandlerInterceptor {
         }
         //如果有token，解析token
         try {
-            JWTutils.parseToken(token);
+            Claims claims = JWTutils.parseToken(token);
+            Integer id = (Integer) claims.get("id");
+            String username = (String) claims.get("username");
+            UserContextHoler.setUser(new UserDTO(id,username));
         } catch (Exception e) {
             //如果解析失败，响应401
             log.info("登录信息已经失效，请重新登录");
@@ -45,5 +51,10 @@ public class TokenInterceptor implements HandlerInterceptor {
         //如果解析成功，放行
         log.info("身份信息正确，放行");
         return true;
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        UserContextHoler.clear();
     }
 }

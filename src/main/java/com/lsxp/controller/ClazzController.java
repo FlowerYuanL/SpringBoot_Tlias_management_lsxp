@@ -1,6 +1,7 @@
 package com.lsxp.controller;
 
 
+import com.lsxp.annotation.LogAnnotation;
 import com.lsxp.pojo.Clazz;
 import com.lsxp.pojo.ClazzQueryParam;
 import com.lsxp.pojo.PageResult;
@@ -45,6 +46,7 @@ public class ClazzController {
     * 如果该班级下关联的有学生，不允许删除，并提示错误信息"对不起, 该班级下有学生, 不能直接删除"
     * */
     @DeleteMapping("/{id}")
+    @LogAnnotation
     public Result deleteClazz(@PathVariable Integer id) {
         log.info("根据id删除班级信息:{}",id);
         clazzService.deleteClazz(id);
@@ -56,6 +58,7 @@ public class ClazzController {
     * 接收json格式的参数，通过注解@RequestBody标记参数
     * */
     @PostMapping
+    @LogAnnotation
     public Result saveClazz(@RequestBody Clazz clazz) {
         log.info("新增班级于{},新增班级信息:{}", LocalDateTime.now(), clazz);
         clazzService.saveClazz(clazz);
@@ -79,6 +82,7 @@ public class ClazzController {
     * 接收json格式的参数，通过注解@RequestBody标记参数
     * */
     @PutMapping
+    @LogAnnotation
     public Result updateClazz(@RequestBody Clazz clazz) {
         log.info("编辑班级信息，修改后的班级信息为:{}",clazz);
         clazzService.updateClazz(clazz);

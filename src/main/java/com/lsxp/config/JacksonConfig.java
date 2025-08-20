@@ -13,7 +13,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-
+/*
+* 该配置类在后续的操作中，如果想要下面的方法生效，必须先注入
+* */
 @Configuration
 public class JacksonConfig {
 
